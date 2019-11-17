@@ -1,0 +1,93 @@
+variables:
+  IMAGE_LAST_SUCCESS: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/commit:$CI_COMMIT_SHA
+  IMAGE_PUSH: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+
+stages:
+  - debug
+  - pre_build
+  - build
+  - post_build
+  - pre_deliver
+  - deliver
+  - post_deliver
+  - pre_deploy
+  - deploy
+  - post_deploy
+
+# debug:
+#   stage: debug
+#   services:
+#     - docker:stable-dind
+
+#   image: docker:stable
+#   script:
+#     - env
+#     - docker info
+
+
+# check config files:
+#   stage: pre_build
+#   image:
+#     name: prom/prometheus:$PROMETHEUS_VERSION
+#     entrypoint: [""]
+#   script:
+#     - promtool check config prometheus.yml
+
+.docker_login:
+  image: docker:stable
+  services:
+    - docker:stable-dind
+  tags:
+    - docker
+  before_script:
+    - docker --version
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+build_image:
+  stage: build
+  extends: .docker_login
+  script:
+    # # Skip if commit image already exists
+    # - docker image list $IMAGE_COMMIT && exit
+    - docker pull $IMAGE_LAST_SUCCESS || true
+    - docker build  --cache-from $IMAGE_LAST_SUCCESS --tag $IMAGE_COMMIT .
+    - docker push $IMAGE_COMMIT
+
+verify_image:
+  stage: post_build
+  image:
+    name: $IMAGE_COMMIT
+    entrypoint: [""]
+  script:
+    - ls -l
+
+.docker_push_image:
+  stage: deliver
+  extends: .docker_login
+  script:
+    - docker pull $IMAGE_COMMIT
+    - docker tag $IMAGE_COMMIT  $IMAGE_PUSH
+    - docker push $IMAGE_PUSH
+
+latest_image:
+  stage: deliver
+  extends: .docker_push_image
+
+deploy_master-latest_image:
+  stage: deliver
+  variables:
+    IMAGE_PUSH: $CI_REGISTRY_IMAGE:latest
+  only:
+    refs:
+      - master
+  extends: .docker_push_image
+
+deploy_stable_image:
+  stage: deliver
+  variables:
+    IMAGE_PUSH: $CI_REGISTRY_IMAGE:stable
+  only:
+    refs:
+      - stable
+  extends: .docker_push_image

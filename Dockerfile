@@ -1,4 +1,4 @@
 FROM node:alpine
 
-RUN apk add nps
+RUN apk add npm
 RUN npm install --global textlint
