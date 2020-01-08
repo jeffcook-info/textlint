@@ -1,0 +1,11 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:extend:20180424':
+    - textlint-rule-editorconfig > extend:
+        patched: '2020-01-08T17:26:43.091Z'
+  'npm:minimatch:20160620':
+    - textlint-rule-editorconfig > minimatch:
+        patched: '2020-01-08T17:26:43.091Z'
