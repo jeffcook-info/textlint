@@ -11,7 +11,7 @@
     "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
-    "textlint": "^11.2.3",
+    "textlint": "11.6.1",
     "textlint-rule-no-exclamation-question-mark": "1.0.2",
     "textlint-rule-editorconfig": "1.0.3",
     "textlint-rule-no-empty-section": "1.1.0",
@@ -28,7 +28,7 @@
     "textlint-rule-apostrophe": "1.0.0",
     "textlint-rule-stop-words": "1.0.18",
     "textlint-rule-en-capitalization": "2.0.2",
-    "snyk": "^1.277.2"
+    "snyk": "1.278.0"
   },
   "snyk": true
 }
