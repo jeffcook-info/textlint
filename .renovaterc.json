@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "packageRules": [
+    {
+      "datasources": ["docker"],
+      "labels": ["docker-update"]
+    }
+  ]
+}
