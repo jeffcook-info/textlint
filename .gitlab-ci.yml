@@ -22,6 +22,7 @@ dependabot:
     PACKAGE_MANAGER_SET: 'docker,npm'
   trigger:
     project: jeffcook/dependabot-script
+    strategy: depend
   only:
     - schedules
 
