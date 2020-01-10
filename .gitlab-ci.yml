@@ -15,6 +15,17 @@ stages:
   - deploy
   - post_deploy
 
+dependabot:
+  stage: debug
+  variables:
+    PROJECT_PATH: $CI_PROJECT_PATH
+    PACKAGE_MANAGER_SET: 'docker,npm'
+  trigger:
+    project: jeffcook/dependabot-script
+  only:
+    - schedules
+
+
 # debug:
 #   stage: debug
 #   services:
@@ -43,6 +54,9 @@ stages:
   before_script:
     - docker --version
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  except:
+    - schedules
+
 
 build_image:
   stage: build
@@ -53,6 +67,8 @@ build_image:
     - docker pull $IMAGE_LAST_SUCCESS || true
     - docker build  --cache-from $IMAGE_LAST_SUCCESS --tag $IMAGE_COMMIT .
     - docker push $IMAGE_COMMIT
+  except:
+    - schedules
 
 verify_image:
   stage: post_build
@@ -61,6 +77,8 @@ verify_image:
     entrypoint: [""]
   script:
     - ls -l
+  except:
+    - schedules
 
 .docker_push_image:
   stage: deliver
