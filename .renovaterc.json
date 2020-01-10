@@ -1,9 +1,24 @@
 {
   "enabled": true,
+  "extends": [
+      "config:base"
+  ],
   "packageRules": [
     {
       "datasources": ["docker"],
       "labels": ["docker-update"]
     }
-  ]
+  ],
+  "node": {
+      "major": {
+          "enabled": true
+      },
+      "separateMultipleMajor": true
+  },
+  "docker": {
+      "major": {
+          "enabled": true
+      },
+      "separateMultipleMajor": true
+  }
 }
