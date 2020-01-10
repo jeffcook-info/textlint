@@ -64,7 +64,7 @@ build_image:
   extends: .docker_login
   script:
     # # Skip if commit image already exists
-    # - docker image list $IMAGE_COMMIT && exit
+    - docker pull $IMAGE_COMMIT && exit
     - docker pull $IMAGE_LAST_SUCCESS || true
     - docker build  --cache-from $IMAGE_LAST_SUCCESS --tag $IMAGE_COMMIT .
     - docker push $IMAGE_COMMIT
