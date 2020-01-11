@@ -13,6 +13,7 @@ stages:
   - pre_build
   - build
   - post_build
+  - test
   - pre_deliver
   - deliver
   - post_deliver
