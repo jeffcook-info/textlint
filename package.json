@@ -28,7 +28,7 @@
     "textlint-rule-apostrophe": "1.0.0",
     "textlint-rule-stop-words": "1.0.18",
     "textlint-rule-en-capitalization": "2.0.2",
-    "snyk": "1.278.0"
+    "snyk": "1.1297.3"
   },
   "snyk": true
 }
